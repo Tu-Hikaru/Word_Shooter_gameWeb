@@ -84,6 +84,28 @@ asyncio.run( custom_site() )
 # =============================================================================
 # --></script><head>
 
+<!-- SCRIPT CHẶN ÂM THANH CẤP HỆ THỐNG TRÌNH DUYỆT -->
+<script type="application/javascript">
+(function() {
+    const nullFn = function() {};
+    if (window.AudioContext || window.webkitAudioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        AudioCtx.prototype.resume = function() { return Promise.resolve(); };
+        AudioCtx.prototype.createBufferSource = function() {
+            return {
+                connect: nullFn,
+                disconnect: nullFn,
+                start: nullFn,
+                stop: nullFn,
+                buffer: null,
+                loop: false
+            };
+        };
+    }
+    HTMLAudioElement.prototype.play = function() { return Promise.resolve(); };
+})();
+</script>
+
 <script type="application/javascript">
 // END BLOCK
 
