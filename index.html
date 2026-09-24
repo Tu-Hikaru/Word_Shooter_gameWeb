@@ -182,7 +182,7 @@ function show_infobox() {
             right: 0;
         }
 
-        /* Ẩn các phần tử phụ mà không làm sập script của Pygbag */
+        /* Ẩn các phần tử phụ */
         #pyconsole, #system, #box, #crt, #dlg, .topright, .bottomright, .center, .trinfo, .framed {
             display: none !important;
         }
@@ -281,15 +281,18 @@ height="720px"
 
     </script>
 
-    <!-- Đoạn mã tự động tắt nhạc nền được thêm ở đây -->
+    <!-- Đoạn mã tắt nhạc nền tự động đã sửa -->
     <script>
-      const muteBgMusic = setInterval(() => {
+      const muteInterval = setInterval(() => {
         if (window.Module && window.Module.PyRun_SimpleString) {
-          window.Module.PyRun_SimpleString("import pygame; pygame.mixer.music.set_volume(0.0)");
+          try {
+            window.Module.PyRun_SimpleString("import pygame; pygame.mixer.music.set_volume(0.0); pygame.mixer.music.pause()");
+          } catch(e) {}
         }
-      }, 1000);
+      }, 500);
 
-      setTimeout(() => clearInterval(muteBgMusic), 10000);
+      // Dừng vòng lặp sau 15 giây khi game đã chạy ổn định
+      setTimeout(() => clearInterval(muteInterval), 15000);
     </script>
 
 </body>
